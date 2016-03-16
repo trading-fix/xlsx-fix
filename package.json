@@ -15,9 +15,6 @@
     "office",
     "spreadsheet"
   ],
-  "bin": {
-    "xlsx": "./bin/xlsx.njs"
-  },
   "main": "./xlsx",
   "dependencies": {
     "ssf": "~0.8.1",
