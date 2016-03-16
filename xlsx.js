@@ -2,16 +2,12 @@
 /* vim: set ts=2: */
 /*jshint -W041 */
 /*jshint funcscope:true, eqnull:true */
-//var cptable = require('./cpexcel');
-//var fs = require('fs');
 var jszip = require('js'+'zip');
-//var _fs = fs;
 
 var XLSX = {};
 (function make_xlsx(XLSX){
 XLSX.version = '0.8.6';
 var current_codepage = 1200, current_cptable;
-// CHANGED current_cptable = cptable[current_codepage];
 function reset_cp() { set_cp(1200); }
 var set_cp = function(cp) { current_codepage = cp; };
 
@@ -1201,11 +1197,6 @@ function read_date(blob, offset) {
 	return new Date(( ( (__readUInt32LE(blob,offset+4)/1e7)*Math.pow(2,32)+__readUInt32LE(blob,offset)/1e7 ) - 11644473600)*1000);
 }
 
-	/*
-	 var fs;
-function readFileSync(filename, options) {
-	// CHANGED return parse(fs.readFileSync(filename), options);
-}*/
 
 function readSync(blob, options) {
 	switch(options !== undefined && options.type !== undefined ? options.type : "base64") {
@@ -11637,7 +11628,6 @@ function read_zip(data, opts) {
 		case "base64": zip = new jszip(d, { base64:true }); break;
 		case "binary": case "array": zip = new jszip(d, { base64:false }); break;
 		case "buffer": zip = new jszip(d); break;
-		// CHANGED case "file": zip=new jszip(d=_fs.readFileSync(data)); break;
 		default: throw new Error("Unrecognized type " + o.type);
 	}
 	return parse_zip(zip, o);
@@ -11647,7 +11637,6 @@ function readSync(data, opts) {
 	var zip, d = data, isfile = false, n;
 	var o = opts||{};
 	if(!o.type) o.type = (has_buf && Buffer.isBuffer(data)) ? "buffer" : "base64";
-	// CHAGNED if(o.type == "file") { isfile = true; o.type = "buffer"; d = _fs.readFileSync(data); }
 	switch((n = firstbyte(d, o))) {
 		case 0xD0:
 			if(isfile) o.type = "file";
@@ -11676,7 +11665,6 @@ function write_zip_type(wb, opts) {
 		case "base64": return z.generate({type:"base64"});
 		case "binary": return z.generate({type:"string"});
 		case "buffer": return z.generate({type:"nodebuffer"});
-		// CHANGED case "file": return _fs.writeFileSync(o.file, z.generate({type:"nodebuffer"}));
 		default: throw new Error("Unrecognized type " + o.type);
 	}
 }
